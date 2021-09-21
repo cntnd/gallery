@@ -1,30 +1,119 @@
 ?><?php
-// cntnd_html_input
-
-// input/vars
-$uuid = rand();
-$truncate = (bool) "CMS_VALUE[1]";
-$lines = (int) "CMS_VALUE[2]";
-$own_js = (bool) "CMS_VALUE[3]";
+// cntnd_gallery_input
 
 // includes
 cInclude('module', 'includes/style.cntnd_gallery_output-or-input.php');
+cInclude('module', 'includes/class.cntnd_gallery_input.php');
+cInclude('module', 'includes/class.cntnd_util.php');
 
+// input/vars
+$galleryname = "CMS_VALUE[1]";
+if (empty($galleryname)){
+    $galleryname="gallery";
+}
+$template = "CMS_VALUE[2]";
+$selectedDir = "CMS_VALUE[3]";
+$thumbDir = "CMS_VALUE[4]";
+if (empty($thumbDir)){
+    $thumbDir='thumb';
+}
+$maxImgPerRow = "CMS_VALUE[5]";
+if (empty($maxImgPerRow)){
+    $maxImgPerRow='0';
+}
+$mobileMaxImgPerRow = "CMS_VALUE[6]";
+if (empty($mobileMaxImgPerRow)){
+    $mobileMaxImgPerRow='0';
+}
+$sortDir = "CMS_VALUE[7]";
+if (empty($sortDir)){
+    $sortDir='DESC';
+}
+
+// other vars
+$uuid = rand();
+
+$cfgClient = cRegistry::getClientConfig();
+$templates = array();
+$template_dir   = $cfgClient[$client]["module"]["path"].'cntnd_gallery/template/';
+$handle         = opendir($template_dir);
+while ($entryName = readdir($handle)){
+    if (is_file($template_dir.$entryName) && !CntndUtil::startsWith($entryName, "_")){
+        $templates[]=$entryName;
+    }
+}
+closedir($handle);
+asort($templates);
+
+$cntndInput = new CntndGalleryInput($lang, $client);
+
+if (!$template OR empty($template) OR $template=="false"){
+    echo '<div class="cntnd_alert cntnd_alert-primary">'.mi18n("CHOOSE_TEMPLATE").'</div>';
+}
 ?>
 <div class="form-vertical">
-  <div class="form-check form-check-inline">
-    <input id="truncate_<?= $uuid ?>" class="form-check-input" type="checkbox" name="CMS_VAR[1]" value="true" <?php if($truncate){ echo 'checked'; } ?> />
-    <label for="truncate_<?= $uuid ?>"><?= mi18n("TRUNCATE") ?></label>
-  </div>
 
-  <div class="form-group">
-    <label for="lines_<?= $uuid ?>"><?= mi18n("TRUNCATE_LINES") ?></label>
-    <input id="lines_<?= $uuid ?>" name="CMS_VAR[2]" type="number" value="<?= $lines ?>" />
-  </div>
+    <div class="form-group">
+        <label for="galleryname_<?= $uuid ?>"><?= mi18n("GALLERY_NAME") ?></label>
+        <input id="galleryname_<?= $uuid ?>" name="CMS_VAR[1]" type="text" class="cntnd_gallery_id" value="<?= $galleryname ?>" />
+    </div>
 
-  <div class="form-check form-check-inline">
-    <input id="ownjs_<?= $uuid ?>" class="form-check-input" type="checkbox" name="CMS_VAR[3]" value="true" <?php if($own_js){ echo 'checked'; } ?> />
-    <label for="ownjs_<?= $uuid ?>"><?= mi18n("TRUNCATE_OWNJS") ?></label>
-  </div>
+    <div class="form-group">
+        <label for="template_<?= $uuid ?>"><?= mi18n("TEMPLATE") ?></label>
+        <select name="CMS_VAR[2]" id="template_<?= $uuid ?>" size="1">
+            <option value="false"><?= mi18n("SELECT_CHOOSE") ?></option>
+            <?php
+            foreach ($templates as $template_file) {
+                $selected="";
+                if ($template==$template_file){
+                    $selected = 'selected="selected"';
+                }
+                echo '<option value="'.$template_file.'" '.$selected.'>'.$template_file.'</option>';
+            }
+            ?>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="gallery_<?= $uuid ?>"><?= mi18n("GALLERY") ?></label>
+        <select name="CMS_VAR[3]" id="gallery_<?= $uuid ?>" size="1">
+            <option value="false"><?= mi18n("SELECT_CHOOSE") ?></option>
+            <?php
+            foreach ($cntndInput->folders() as $folder) {
+                $selected="";
+                if ($selectedDir==$folder){
+                    $selected = 'selected="selected"';
+                }
+                echo '<option value="'.$folder.'" '.$selected.'>'.$folder.'</opt.ion>';
+            }
+            ?>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="thumb_<?= $uuid ?>"><?= mi18n("THUMB") ?></label>
+        <input id="thumb_<?= $uuid ?>" name="CMS_VAR[4]" type="text" value="<?= $thumbDir ?>" />
+    </div>
+
+    <div class="d-flex justify-content-between">
+        <div class="w-50 form-group">
+            <label for="images_per_row_<?= $uuid ?>"><?= mi18n("IMAGES_PER_ROW") ?></label>
+            <input id="images_per_row_<?= $uuid ?>" name="CMS_VAR[5]" type="number" value="<?= $maxImgPerRow ?>" />
+        </div>
+
+        <div class="w-50 form-group">
+            <label for="images_per_row_mobile_<?= $uuid ?>"><?= mi18n("IMAGES_PER_ROW_MOBILE") ?></label>
+            <input id="images_per_row_mobile_<?= $uuid ?>" name="CMS_VAR[6]" type="number" value="<?= $mobileMaxImgPerRow ?>" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="sort_<?= $uuid ?>"><?= mi18n("SORT") ?></label>
+        <select name="CMS_VAR[7]" id="sort_<?= $uuid ?>" size="1">
+            <option value="ASC" <?php if ($sortDir=="ASC"){ echo 'selected="selected"'; } ?>><?= mi18n("SORT_ASC") ?></option>
+            <option value="DESC" <?php if ($sortDir=="DESC"){ echo 'selected="selected"'; } ?>><?= mi18n("SORT_DESC") ?></option>
+        </select>
+    </div>
+
 </div>
 <?php

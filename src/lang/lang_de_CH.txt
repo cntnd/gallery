@@ -1,1 +1,12 @@
-MODULE=Modul name
+MODULE=Gallery
+SELECT_CHOOSE=-bitte wählen-
+CHOOSE_TEMPLATE=Bitte das Template auswählen ansonsten wird die Galerie nicht angezeigt.
+GALLERY_NAME=Name der Galerie (default: gallery):
+TEMPLATE=Template wählen:
+GALLERY=Galerie-Ordner:
+THUMB=Thumb-Ordner (default "thumb"):
+IMAGES_PER_ROW=Anzahl Bilder/Zeile (0 \= keine Zeilen):
+IMAGES_PER_ROW_MOBILE=Mobile, Bilder/Zeile (0 \= keine Zeilen):
+SORT=Sortierung
+SORT_ASC=Aufsteigend (A > Z)
+SORT_DESC=Absteigend (Z > A)

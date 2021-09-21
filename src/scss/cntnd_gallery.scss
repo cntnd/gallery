@@ -1,15 +1,33 @@
 /* DEFAULT SCSS */
 @import url('https://cdn.jsdelivr.net/gh/cntnd/core_style@0.1.0/dist/core_style.css');
 
-.content_box,
-.listitem {
+.content_box {
 	border: 1px solid silver;
+	width: 100%;
 }
+
 .content_type_label {
 	background: silver;
 }
 
+.listitem {
+	border-radius: .25rem;
+	padding: 5px;
+	margin: 5px;
+}
+
+.hide {
+	display: none !important;
+}
+
+.show {
+	display: block !important;
+}
+
 /* HERE COMES YOUR SCSS */
+.w-50 {
+	width: calc(50% - 10px) !important;
+}
 
 .cntnd_gallery-input {
 	width: 80%;
