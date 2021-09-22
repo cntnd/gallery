@@ -18,8 +18,6 @@ $thumbDir    = "CMS_VALUE[4]";
 $sortDir 	 = "CMS_VALUE[5]";
 $langIndependent = (bool) "CMS_VALUE[6]";
 
-var_dump($langIndependent);
-
 // other vars
 $cntndOutput = new CntndGalleryOutput($idart, $lang, $client, $galleryname, $selectedDir, $thumbDir, $sortDir, $langIndependent);
 
