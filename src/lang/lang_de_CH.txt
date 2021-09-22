@@ -8,3 +8,5 @@ THUMB=Thumb-Ordner (default "thumb"):
 SORT=Sortierung
 SORT_ASC=Aufsteigend (A > Z)
 SORT_DESC=Absteigend (Z > A)
+COMMENT=Kommentare sprachunabhängig
+COMMENT_DESCRIPTION=(nur ein Wert für alle Sprachen; default in jeder Sprache eigene Werte)

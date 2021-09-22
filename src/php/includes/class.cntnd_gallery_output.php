@@ -11,35 +11,37 @@ class CntndGalleryOutput {
   private $lang;
   private $client;
   private $galleryname;
-  private $db;
-  private $comments=array();
-  private $commentFile;
-  private $images=array();
+  private $folder;
   private $thumb;
-  private $imagetypes=array('jpeg','jpg','gif','png');
   private $sort;
+  private $langIndependent;
+  private $commentFile;
+
+  private $db;
+  private $images=array();
+  private $imagetypes=array('jpeg','jpg','gif','png');
   private $uploadDir;
   private $uploadPath;
-  private $folder;
 
-  function __construct($idart, $lang, $client, $galleryname, $folder, $thumb, $sort, $commentFile = null) {
+  function __construct($idart, $lang, $client, $galleryname, $folder, $thumb, $sort, $langIndependent, $commentFile = null) {
     $this->idart = $idart;
     $this->lang = $lang;
     $this->client = $client;
     $this->galleryname = $galleryname;
-    $this->db = new cDb;
-
-    $cfgClient = cRegistry::getClientConfig();
-    $this->uploadDir = $cfgClient[$client]["upl"]["htmlpath"];
-    $this->uploadPath = $cfgClient[$client]["upl"]["path"];
     $this->folder = $folder;
-
     $this->thumb = $thumb;
     if (!CntndUtil::endsWith($thumb, "/")){
       $this->thumb = $thumb."/";
     }
     $this->sort = $sort;
+    $this->langIndependent=$langIndependent;
     $this->commentFile=$commentFile;
+
+    $this->db = new cDb;
+
+    $cfgClient = cRegistry::getClientConfig();
+    $this->uploadDir = $cfgClient[$client]["upl"]["htmlpath"];
+    $this->uploadPath = $cfgClient[$client]["upl"]["path"];
   }
 
   public function images(){
@@ -66,7 +68,7 @@ class CntndGalleryOutput {
   private function loadComments(){
     $data=array();
 
-    $sql = "SELECT serializeddata FROM cntnd_gallery WHERE galleryname=':galleryname' AND idart=:idart AND idlang=:idlang";
+    $sql = $this->loadCommentsQuery();
     $values = array(
         'galleryname' => cSecurity::toString($this->galleryname),
         'idart' => cSecurity::toInteger($this->idart),
@@ -81,6 +83,13 @@ class CntndGalleryOutput {
     return $data;
   }
 
+  private function loadCommentsQuery(){
+    if ($this->langIndependent){
+      return "SELECT serializeddata FROM cntnd_gallery WHERE galleryname=':galleryname' AND idart=:idart";
+    }
+    return "SELECT serializeddata FROM cntnd_gallery WHERE galleryname=':galleryname' AND idart=:idart AND idlang=:idlang";
+  }
+
   public function store($data){
     $values = array(
         'galleryname' => cSecurity::toString($this->galleryname),
@@ -88,14 +97,33 @@ class CntndGalleryOutput {
         'idlang' => cSecurity::toInteger($this->lang),
         'data' => CntndUtil::escapeData($data)
     );
-    $this->db->query("SELECT idgallery FROM cntnd_gallery WHERE galleryname=':galleryname' AND idart=:idart AND idlang=:idlang", $values);
-    if (!$this->db->nextRecord()){
-      $sql = "INSERT INTO cntnd_gallery (galleryname, idart, idlang, serializeddata) VALUES (':galleryname',:idart,:idlang,':data')";
+    $this->db->query($this->selectQuery(), $values);
+    $sql = $this->storeQuery($this->db->nextRecord());
+    $this->db->query($sql, $values);
+  }
+
+  private function selectQuery(){
+    if ($this->langIndependent){
+      return "SELECT idgallery FROM cntnd_gallery WHERE galleryname=':galleryname' AND idart=:idart";
+    }
+    return "SELECT idgallery FROM cntnd_gallery WHERE galleryname=':galleryname' AND idart=:idart AND idlang=:idlang";
+  }
+
+  private function storeQuery($update){
+    if ($this->langIndependent){
+      if (!$update) {
+        return "INSERT INTO cntnd_gallery (galleryname, idart, serializeddata) VALUES (':galleryname',:idart,':data')";
+      } else {
+        return "UPDATE cntnd_gallery SET serializeddata=':data' WHERE galleryname=':galleryname' AND idart=:idart";
+      }
     }
     else {
-      $sql = "UPDATE cntnd_gallery SET serializeddata=':data' WHERE galleryname=':galleryname' AND idart=:idart AND idlang=:idlang";
+      if (!$update) {
+        return "INSERT INTO cntnd_gallery (galleryname, idart, idlang, serializeddata) VALUES (':galleryname',:idart,:idlang,':data')";
+      } else {
+        return "UPDATE cntnd_gallery SET serializeddata=':data' WHERE galleryname=':galleryname' AND idart=:idart AND idlang=:idlang";
+      }
     }
-    $this->db->query($sql, $values);
   }
 
   public function load(){

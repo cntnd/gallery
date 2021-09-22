@@ -21,6 +21,7 @@ $sortDir = "CMS_VALUE[5]";
 if (empty($sortDir)){
     $sortDir='DESC';
 }
+$langIndependent = (bool) "CMS_VALUE[6]";
 
 // other vars
 $uuid = rand();
@@ -93,6 +94,12 @@ if (!$template OR empty($template) OR $template=="false"){
             <option value="ASC" <?php if ($sortDir=="ASC"){ echo 'selected="selected"'; } ?>><?= mi18n("SORT_ASC") ?></option>
             <option value="DESC" <?php if ($sortDir=="DESC"){ echo 'selected="selected"'; } ?>><?= mi18n("SORT_DESC") ?></option>
         </select>
+    </div>
+
+    <div class="form-check form-check-inline">
+        <input id="comments_lang_<?= $uuid ?>" class="form-check-input" type="checkbox" name="CMS_VAR[6]" value="true" <?php if($langIndependent){ echo 'checked'; } ?> />
+        <label for="comments_lang_<?= $uuid ?>"><?= mi18n("COMMENT") ?></label>
+        <p><small><?= mi18n("COMMENT_DESCRIPTION") ?></small></p>
     </div>
 
 </div>
