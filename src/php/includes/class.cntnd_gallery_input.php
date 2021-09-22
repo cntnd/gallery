@@ -20,7 +20,7 @@ class CntndGalleryInput {
 
     // folders
 
-    $sql = "SELECT DISTINCT dirname FROM :table WHERE idclient=:idclient AND dirname!='' ORDER BY dirname ASC";
+    $sql = "SELECT DISTINCT dirname FROM :table WHERE idclient=:idclient ORDER BY dirname ASC";
     $values = array(
         'table' => $cfg['tab']['upl'],
         'idclient' => cSecurity::toInteger($client)

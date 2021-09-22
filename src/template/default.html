@@ -1,9 +1,9 @@
 <!-- cntnd_gallery/template/default.html -->
-<div class="cntnd_gallery">
+<div class="d-flex">
     {foreach from=$pictures item=foto name=fotoItem}
-        <div class="cntnd_gallery-image">
-            <a class="fancybox" data-fancybox="{$galleryname}" href="{$foto['image']}" data-caption="{$foto['image']}">
-                <img src="{$foto['thumb']}" width="116" height="76" border="0">
+        <div class="w-25">
+            <a class="fancybox" data-fancybox="{$galleryname}" href="{$foto['image']}" data-caption="{$foto['description']}">
+                <img src="{$foto['thumb']}" />
             </a>
         </div>
     {/foreach}

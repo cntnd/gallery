@@ -15,27 +15,39 @@ $galleryname = "CMS_VALUE[1]";
 $template 	 = "CMS_VALUE[2]";
 $selectedDir = "CMS_VALUE[3]";
 $thumbDir    = "CMS_VALUE[4]";
-$maxImgPerRow= "CMS_VALUE[5]";
-$mobileMaxImgPerRow = "CMS_VALUE[6]";
-$sortDir 	 = "CMS_VALUE[7]";
+$sortDir 	 = "CMS_VALUE[5]";
 
 // other vars
-$cntndOutput = new CntndGalleryOutput($lang, $client, $selectedDir, $thumbDir, $sortDir);
+$cntndOutput = new CntndGalleryOutput($idart, $lang, $client, $galleryname, $selectedDir, $thumbDir, $sortDir);
 
 // module
+$formId = "GALLERY_".$galleryname;
+$entryFormId = "ENTRY_".$galleryname;
+
 if ($editmode){
-    cInclude('module', 'includes/style.cntnd_gallery_output-or-input.php');
+    cInclude('module', 'includes/style.cntnd_gallery_editmode.php');
+    cInclude('module', 'includes/script.cntnd_gallery_output.php');
+
+    if ($_POST){
+        if (array_key_exists($entryFormId.'_description',$_POST)){
+            // INSERT
+            $values = $_POST[$entryFormId.'_description'];
+            $serializeddata = json_encode($values);
+            $cntndOutput->store($serializeddata);
+        }
+    }
 
     echo '<div class="content_box"><label class="content_type_label">'.mi18n("MODULE").'</label>';
 }
 
+// load data
+$cntndOutput->load();
+
 $tpl = cSmartyFrontend::getInstance();
+$tpl->assign('formId', $formId);
+$tpl->assign('entryFormId', $entryFormId);
 $tpl->assign('galleryname', $galleryname);
 $tpl->assign('pictures', $cntndOutput->images());
-$tpl->assign('maxImgPerRow', $maxImgPerRow);
-$tpl->assign('mobileMaxImgPerRow', $mobileMaxImgPerRow);
-//$tpl->assign('description', $description);
-
 
 if (cRegistry::isBackendEditMode()) {
     $tpl->display('_editor.html');

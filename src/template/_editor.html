@@ -1,20 +1,11 @@
-<div class="span-21 last mob-span-10 mob-last">
-    <form id="DYNLIST_{$galleryname}" name="DYNLIST_{$galleryname}" method="POST">
-
+<form data-uuid="{$formId}" id="{$formId}" name="{$formId}" method="post">
+    <div class="d-flex">
         {foreach from=$pictures item=foto name=fotoItem}
-        <div class="span-10">
-            <div class="span-3 {if $smarty.foreach.fotoItem.last}last{/if}">
-                <a class="fancybox" data-fancybox="{$galleryname}" href="{$foto['image']}" data-caption="{$description[{$foto['filename']}]}">
-                    <img src="{$foto['thumb']}" width="116" height="76" border="0">
-                </a>
-            </div>
-            <div class="span-7 last">
-                <input placeholder="Kommentar" type="text" name="{$galleryname}[{$foto['filename']}]" class="cntnd_gallery-input" value="{$description[{$foto['filename']}]}" /><br />
-                <a href="javascript:gallerySpeichern('DYNLIST_{$galleryname}','{$galleryname}_action');" class="cntnd_gallery-button">Speichern</a>
-            </div>
+        <div class="w-33 pt10">
+            <img src="{$foto['thumb']}" />
+            <input placeholder="Kommentar" type="text" name="{$entryFormId}_description[{$foto['filename']}]" class="cntnd_gallery-input" value="{$foto['description']}" /><br />
+            <button type="button" data-uuid="{$formId}" class="cntnd_gallery-button btn btn-sm btn-primary">Speichern</button>
         </div>
         {/foreach}
-
-        <input type="hidden" id="{$galleryname}_action" name="{$galleryname}_action" />
-    </form>
-</div>
+    </div>
+</form>

@@ -2,7 +2,7 @@
 // cntnd_gallery_input
 
 // includes
-cInclude('module', 'includes/style.cntnd_gallery_output-or-input.php');
+cInclude('module', 'includes/style.cntnd_gallery_editmode.php');
 cInclude('module', 'includes/class.cntnd_gallery_input.php');
 cInclude('module', 'includes/class.cntnd_util.php');
 
@@ -17,15 +17,7 @@ $thumbDir = "CMS_VALUE[4]";
 if (empty($thumbDir)){
     $thumbDir='thumb';
 }
-$maxImgPerRow = "CMS_VALUE[5]";
-if (empty($maxImgPerRow)){
-    $maxImgPerRow='0';
-}
-$mobileMaxImgPerRow = "CMS_VALUE[6]";
-if (empty($mobileMaxImgPerRow)){
-    $mobileMaxImgPerRow='0';
-}
-$sortDir = "CMS_VALUE[7]";
+$sortDir = "CMS_VALUE[5]";
 if (empty($sortDir)){
     $sortDir='DESC';
 }
@@ -95,21 +87,9 @@ if (!$template OR empty($template) OR $template=="false"){
         <input id="thumb_<?= $uuid ?>" name="CMS_VAR[4]" type="text" value="<?= $thumbDir ?>" />
     </div>
 
-    <div class="d-flex justify-content-between">
-        <div class="w-50 form-group">
-            <label for="images_per_row_<?= $uuid ?>"><?= mi18n("IMAGES_PER_ROW") ?></label>
-            <input id="images_per_row_<?= $uuid ?>" name="CMS_VAR[5]" type="number" value="<?= $maxImgPerRow ?>" />
-        </div>
-
-        <div class="w-50 form-group">
-            <label for="images_per_row_mobile_<?= $uuid ?>"><?= mi18n("IMAGES_PER_ROW_MOBILE") ?></label>
-            <input id="images_per_row_mobile_<?= $uuid ?>" name="CMS_VAR[6]" type="number" value="<?= $mobileMaxImgPerRow ?>" />
-        </div>
-    </div>
-
     <div class="form-group">
         <label for="sort_<?= $uuid ?>"><?= mi18n("SORT") ?></label>
-        <select name="CMS_VAR[7]" id="sort_<?= $uuid ?>" size="1">
+        <select name="CMS_VAR[5]" id="sort_<?= $uuid ?>" size="1">
             <option value="ASC" <?php if ($sortDir=="ASC"){ echo 'selected="selected"'; } ?>><?= mi18n("SORT_ASC") ?></option>
             <option value="DESC" <?php if ($sortDir=="DESC"){ echo 'selected="selected"'; } ?>><?= mi18n("SORT_DESC") ?></option>
         </select>
