@@ -1,5 +1,7 @@
 <?php
 
+namespace Cntnd\Gallery;
+
 /**
  * cntnd Util Class
  */
@@ -26,6 +28,34 @@ class CntndUtil {
 
   public static function endsWith($haystack, $needle){
     return substr_compare($haystack, $needle, -strlen($needle)) === 0;
+  }
+
+  public static function templates($module, $client){
+    $cfgClient = \cRegistry::getClientConfig();
+    $templates = array();
+    $template_dir   = $cfgClient[$client]["module"]["path"].$module.'/template/';
+    $handle         = opendir($template_dir);
+    while ($entryName = readdir($handle)){
+      if (is_file($template_dir.$entryName) && !self::startsWith($entryName, "_")){
+        $templates[]=$entryName;
+      }
+    }
+    closedir($handle);
+    asort($templates);
+
+    return $templates;
+  }
+
+  public static function isTemplate($module, $client, $template){
+    $cfgClient = \cRegistry::getClientConfig();
+    $template_file   = $cfgClient[$client]["module"]["path"].$module.'/template/'.$template;
+
+    if (!empty($template) && self::endsWith($template, ".html")){
+      if (file_exists($template_file)){
+        return true;
+      }
+    }
+    return false;
   }
 }
 

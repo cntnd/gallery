@@ -1,11 +1,13 @@
 <?php
 
+namespace Cntnd\Gallery;
+
 include_once("class.cntnd_util.php");
 
 /**
  * cntnd_gallery Output Class
  */
-class CntndGalleryOutput {
+class CntndGalleryOutput extends CntndUtil {
 
   private $idart;
   private $lang;
@@ -30,16 +32,16 @@ class CntndGalleryOutput {
     $this->galleryname = $galleryname;
     $this->folder = $folder;
     $this->thumb = $thumb;
-    if (!CntndUtil::endsWith($thumb, "/")){
+    if (!self::endsWith($thumb, "/")){
       $this->thumb = $thumb."/";
     }
     $this->sort = $sort;
     $this->langIndependent=$langIndependent;
     $this->commentFile=$commentFile;
 
-    $this->db = new cDb;
+    $this->db = new \cDb;
 
-    $cfgClient = cRegistry::getClientConfig();
+    $cfgClient = \cRegistry::getClientConfig();
     $this->uploadDir = $cfgClient[$client]["upl"]["htmlpath"];
     $this->uploadPath = $cfgClient[$client]["upl"]["path"];
   }
@@ -70,14 +72,14 @@ class CntndGalleryOutput {
 
     $sql = $this->loadCommentsQuery();
     $values = array(
-        'galleryname' => cSecurity::toString($this->galleryname),
-        'idart' => cSecurity::toInteger($this->idart),
-        'idlang' => cSecurity::toInteger($this->lang)
+        'galleryname' => \cSecurity::toString($this->galleryname),
+        'idart' => \cSecurity::toInteger($this->idart),
+        'idlang' => \cSecurity::toInteger($this->lang)
     );
     $this->db->query($sql, $values);
     while ($this->db->nextRecord()) {
       if (is_string($this->db->f('serializeddata'))){
-        $data = CntndUtil::unescapeData($this->db->f('serializeddata'));
+        $data = self::unescapeData($this->db->f('serializeddata'));
       }
     }
     return $data;
@@ -92,10 +94,10 @@ class CntndGalleryOutput {
 
   public function store($data){
     $values = array(
-        'galleryname' => cSecurity::toString($this->galleryname),
-        'idart' => cSecurity::toInteger($this->idart),
-        'idlang' => cSecurity::toInteger($this->lang),
-        'data' => CntndUtil::escapeData($data)
+        'galleryname' => \cSecurity::toString($this->galleryname),
+        'idart' => \cSecurity::toInteger($this->idart),
+        'idlang' => \cSecurity::toInteger($this->lang),
+        'data' => self::escapeData($data)
     );
     $this->db->query($this->selectQuery(), $values);
     $sql = $this->storeQuery($this->db->nextRecord());
@@ -131,14 +133,14 @@ class CntndGalleryOutput {
     $comments = $this->createComments($this->commentFile);
 
     // images
-    $cfg = cRegistry::getConfig();
+    $cfg = \cRegistry::getConfig();
 
     $sql = "SELECT * FROM :table WHERE idclient=:idclient AND dirname=':dirname' ORDER BY filename :sort";
     $values = array(
         'table' => $cfg['tab']['upl'],
-        'idclient' => cSecurity::toInteger($this->client),
-        'dirname' => cSecurity::toString($this->folder),
-        'sort' => cSecurity::toString($this->sort)
+        'idclient' => \cSecurity::toInteger($this->client),
+        'dirname' => \cSecurity::toString($this->folder),
+        'sort' => \cSecurity::toString($this->sort)
     );
     $this->db->query($sql, $values);
     while ($this->db->nextRecord()) {

@@ -1,9 +1,13 @@
 <?php
 
+namespace Cntnd\Gallery;
+
+require_once("class.cntnd_util.php");
+
 /**
  * cntnd_gallery Input Class
  */
-class CntndGalleryInput {
+class CntndGalleryInput extends CntndUtil {
 
   private $lang;
   private $client;
@@ -13,7 +17,7 @@ class CntndGalleryInput {
   function __construct($lang, $client) {
     $this->lang = $lang;
     $this->client = $client;
-    $this->db = new cDb;
+    $this->db = new \cDb;
 
     // contenido config
     $cfg = cRegistry::getConfig();
@@ -23,7 +27,7 @@ class CntndGalleryInput {
     $sql = "SELECT DISTINCT dirname FROM :table WHERE idclient=:idclient ORDER BY dirname ASC";
     $values = array(
         'table' => $cfg['tab']['upl'],
-        'idclient' => cSecurity::toInteger($client)
+        'idclient' => \cSecurity::toInteger($client)
     );
     $this->db->query($sql, $values);
     while ($this->db->nextRecord()) {

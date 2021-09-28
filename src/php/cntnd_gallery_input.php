@@ -2,9 +2,10 @@
 // cntnd_gallery_input
 
 // includes
+use Cntnd\Gallery\CntndGalleryInput;
+
 cInclude('module', 'includes/style.cntnd_gallery_editmode.php');
 cInclude('module', 'includes/class.cntnd_gallery_input.php');
-cInclude('module', 'includes/class.cntnd_util.php');
 
 // input/vars
 $galleryname = "CMS_VALUE[1]";
@@ -25,19 +26,7 @@ $langIndependent = (bool) "CMS_VALUE[6]";
 
 // other vars
 $uuid = rand();
-
-$cfgClient = cRegistry::getClientConfig();
-$templates = array();
-$template_dir   = $cfgClient[$client]["module"]["path"].'cntnd_gallery/template/';
-$handle         = opendir($template_dir);
-while ($entryName = readdir($handle)){
-    if (is_file($template_dir.$entryName) && !CntndUtil::startsWith($entryName, "_")){
-        $templates[]=$entryName;
-    }
-}
-closedir($handle);
-asort($templates);
-
+$templates = CntndGalleryInput::templates('cntnd_gallery', $client);
 $cntndInput = new CntndGalleryInput($lang, $client);
 
 if (!$template OR empty($template) OR $template=="false"){

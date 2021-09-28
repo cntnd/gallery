@@ -2,6 +2,8 @@
 // cntnd_gallery_output
 
 // includes
+use Cntnd\Gallery\CntndGalleryOutput;
+
 cInclude('module', 'includes/class.cntnd_gallery_output.php');
 
 // assert framework initialization
