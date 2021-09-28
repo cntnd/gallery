@@ -20,7 +20,7 @@ class CntndGalleryInput extends CntndUtil {
     $this->db = new \cDb;
 
     // contenido config
-    $cfg = cRegistry::getConfig();
+    $cfg = \cRegistry::getConfig();
 
     // folders
 
