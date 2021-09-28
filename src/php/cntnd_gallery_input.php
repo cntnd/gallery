@@ -2,8 +2,6 @@
 // cntnd_gallery_input
 
 // includes
-use Cntnd\Gallery\CntndGalleryInput;
-
 cInclude('module', 'includes/style.cntnd_gallery_editmode.php');
 cInclude('module', 'includes/class.cntnd_gallery_input.php');
 
@@ -26,8 +24,8 @@ $langIndependent = (bool) "CMS_VALUE[6]";
 
 // other vars
 $uuid = rand();
-$templates = CntndGalleryInput::templates('cntnd_gallery', $client);
-$cntndInput = new CntndGalleryInput($lang, $client);
+$templates = Cntnd\Gallery\CntndGalleryInput::templates('cntnd_gallery', $client);
+$cntndInput = new Cntnd\Gallery\CntndGalleryInput($lang, $client);
 
 if (!$template OR empty($template) OR $template=="false"){
     echo '<div class="cntnd_alert cntnd_alert-primary">'.mi18n("CHOOSE_TEMPLATE").'</div>';

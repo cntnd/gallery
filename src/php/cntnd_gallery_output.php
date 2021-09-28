@@ -2,8 +2,6 @@
 // cntnd_gallery_output
 
 // includes
-use Cntnd\Gallery\CntndGalleryOutput;
-
 cInclude('module', 'includes/class.cntnd_gallery_output.php');
 
 // assert framework initialization
@@ -21,7 +19,7 @@ $sortDir 	 = "CMS_VALUE[5]";
 $langIndependent = (bool) "CMS_VALUE[6]";
 
 // other vars
-$cntndOutput = new CntndGalleryOutput($idart, $lang, $client, $galleryname, $selectedDir, $thumbDir, $sortDir, $langIndependent);
+$cntndOutput = new Cntnd\Gallery\CntndGalleryOutput($idart, $lang, $client, $galleryname, $selectedDir, $thumbDir, $sortDir, $langIndependent);
 
 // module
 $formId = "GALLERY_".$galleryname;
