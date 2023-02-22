@@ -3,8 +3,10 @@
         {foreach from=$pictures item=foto name=fotoItem}
         <div class="w-33 pt10">
             <img src="{$foto['thumb']}" />
+            {if $hasComments}
             <input placeholder="Kommentar" type="text" name="{$entryFormId}_description[{$foto['filename']}]" class="cntnd_gallery-input" value="{$foto['description']}" /><br />
             <button type="button" data-uuid="{$formId}" class="cntnd_gallery-button btn btn-sm btn-primary">Speichern</button>
+            {/if}
         </div>
         {/foreach}
     </div>

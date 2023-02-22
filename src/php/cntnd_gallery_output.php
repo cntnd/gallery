@@ -17,9 +17,11 @@ $selectedDir = "CMS_VALUE[3]";
 $thumbDir    = "CMS_VALUE[4]";
 $sortDir 	 = "CMS_VALUE[5]";
 $langIndependent = (bool) "CMS_VALUE[6]";
+$hasThumbs = (bool) "CMS_VALUE[7]";
+$hasComments = (bool) "CMS_VALUE[8]";
 
 // other vars
-$cntndOutput = new Cntnd\Gallery\CntndGalleryOutput($idart, $lang, $client, $galleryname, $selectedDir, $thumbDir, $sortDir, $langIndependent);
+$cntndOutput = new Cntnd\Gallery\CntndGalleryOutput($idart, $lang, $client, $galleryname, $selectedDir, $thumbDir, $sortDir, $langIndependent, null, $hasThumbs, $hasComments);
 
 // module
 $formId = "GALLERY_".$galleryname;
@@ -48,6 +50,7 @@ $tpl = cSmartyFrontend::getInstance();
 $tpl->assign('formId', $formId);
 $tpl->assign('entryFormId', $entryFormId);
 $tpl->assign('galleryname', $galleryname);
+$tpl->assign('hasComments', $hasComments);
 $tpl->assign('pictures', $cntndOutput->images());
 
 if (cRegistry::isBackendEditMode()) {

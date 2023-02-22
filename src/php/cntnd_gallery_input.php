@@ -21,6 +21,8 @@ if (empty($sortDir)){
     $sortDir='DESC';
 }
 $langIndependent = (bool) "CMS_VALUE[6]";
+$hasThumbs = (bool) "CMS_VALUE[7]";
+$hasComments = (bool) "CMS_VALUE[8]";
 
 // other vars
 $uuid = rand();
@@ -54,40 +56,67 @@ if (!$template OR empty($template) OR $template=="false"){
         </select>
     </div>
 
-    <div class="form-group">
-        <label for="gallery_<?= $uuid ?>"><?= mi18n("GALLERY") ?></label>
-        <select name="CMS_VAR[3]" id="gallery_<?= $uuid ?>" size="1">
-            <option value="false"><?= mi18n("SELECT_CHOOSE") ?></option>
-            <?php
-            foreach ($cntndInput->folders() as $folder) {
-                $selected="";
-                if ($selectedDir==$folder){
-                    $selected = 'selected="selected"';
+    <fieldset>
+        <legend><?= mi18n("GALLERY") ?></legend>
+
+        <div class="form-group">
+            <label for="gallery_<?= $uuid ?>"><?= mi18n("GALLERY_FOLDER") ?></label>
+            <select name="CMS_VAR[3]" id="gallery_<?= $uuid ?>" size="1">
+                <option value="false"><?= mi18n("SELECT_CHOOSE") ?></option>
+                <?php
+                foreach ($cntndInput->folders() as $folder) {
+                    $selected="";
+                    if ($selectedDir==$folder){
+                        $selected = 'selected="selected"';
+                    }
+                    echo '<option value="'.$folder.'" '.$selected.'>'.$folder.'</option>';
                 }
-                echo '<option value="'.$folder.'" '.$selected.'>'.$folder.'</opt.ion>';
-            }
-            ?>
-        </select>
-    </div>
+                ?>
+            </select>
+        </div>
 
-    <div class="form-group">
-        <label for="thumb_<?= $uuid ?>"><?= mi18n("THUMB") ?></label>
-        <input id="thumb_<?= $uuid ?>" name="CMS_VAR[4]" type="text" value="<?= $thumbDir ?>" />
-    </div>
+        <div class="d-flex">
 
-    <div class="form-group">
-        <label for="sort_<?= $uuid ?>"><?= mi18n("SORT") ?></label>
-        <select name="CMS_VAR[5]" id="sort_<?= $uuid ?>" size="1">
-            <option value="ASC" <?php if ($sortDir=="ASC"){ echo 'selected="selected"'; } ?>><?= mi18n("SORT_ASC") ?></option>
-            <option value="DESC" <?php if ($sortDir=="DESC"){ echo 'selected="selected"'; } ?>><?= mi18n("SORT_DESC") ?></option>
-        </select>
-    </div>
+            <div class="w-auto" style="align-self: center;">
+                <div class="form-check form-check-inline">
+                    <input id="has_thumbs_<?= $uuid ?>" class="form-check-input" type="checkbox" name="CMS_VAR[7]" value="true" <?php if($hasThumbs){ echo 'checked="checked"'; } ?> />
+                    <label for="has_thumbs_<?= $uuid ?>"><?= mi18n("HAS_THUMB") ?></label>
+                </div>
+            </div>
 
-    <div class="form-check form-check-inline">
-        <input id="comments_lang_<?= $uuid ?>" class="form-check-input" type="checkbox" name="CMS_VAR[6]" value="true" <?php if($langIndependent){ echo 'checked'; } ?> />
-        <label for="comments_lang_<?= $uuid ?>"><?= mi18n("COMMENT") ?></label>
-        <p><small><?= mi18n("COMMENT_DESCRIPTION") ?></small></p>
-    </div>
+            <div class="w-auto">
+                <div class="form-group">
+                    <label for="thumb_<?= $uuid ?>"><?= mi18n("THUMB") ?></label>
+                    <input id="thumb_<?= $uuid ?>" name="CMS_VAR[4]" type="text" value="<?= $thumbDir ?>" />
+                </div>
+            </div>
+
+        </div>
+
+        <div class="form-group">
+            <label for="sort_<?= $uuid ?>"><?= mi18n("SORT") ?></label>
+            <select name="CMS_VAR[5]" id="sort_<?= $uuid ?>" size="1">
+                <option value="ASC" <?php if ($sortDir=="ASC"){ echo 'selected="selected"'; } ?>><?= mi18n("SORT_ASC") ?></option>
+                <option value="DESC" <?php if ($sortDir=="DESC"){ echo 'selected="selected"'; } ?>><?= mi18n("SORT_DESC") ?></option>
+            </select>
+        </div>
+
+    </fieldset>
+
+    <fieldset>
+        <legend><?= mi18n("COMMENTS") ?></legend>
+
+        <div class="form-check form-check-inline">
+            <input id="has_comments_<?= $uuid ?>" class="form-check-input" type="checkbox" name="CMS_VAR[8]" value="true" <?php if($hasComments){ echo 'checked="checked"'; } ?> />
+            <label for="has_comments_<?= $uuid ?>"><?= mi18n("HAS_COMMENTS") ?></label>
+        </div>
+
+        <div class="form-check form-check-inline">
+            <input id="comments_lang_<?= $uuid ?>" class="form-check-input" type="checkbox" name="CMS_VAR[6]" value="true" <?php if($langIndependent){ echo 'checked="checked"'; } ?> />
+            <label for="comments_lang_<?= $uuid ?>"><?= mi18n("COMMENT") ?></label>
+            <p><small><?= mi18n("COMMENT_DESCRIPTION") ?></small></p>
+        </div>
+    </fieldset>
 
 </div>
 <?php

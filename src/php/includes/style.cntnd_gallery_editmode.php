@@ -1,3 +1,6 @@
 <style>
-<?= file_get_contents($cfgClient[$client]["module"]["path"].'cntnd_gallery/css/cntnd_gallery.css') ?>
+<?php
+$mod = new cApiModule($cCurrentModule);
+echo file_get_contents($cfgClient[$client]["module"]["path"].'/'.$mod->get("alias").'/css/'.$mod->get("alias").'.css')
+?>
 </style>

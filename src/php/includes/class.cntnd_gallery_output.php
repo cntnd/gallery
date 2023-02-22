@@ -18,6 +18,8 @@ class CntndGalleryOutput extends CntndUtil {
   private $sort;
   private $langIndependent;
   private $commentFile;
+  private $hasThumbs;
+  private $hasComments;
 
   private $db;
   private $images=array();
@@ -25,7 +27,7 @@ class CntndGalleryOutput extends CntndUtil {
   private $uploadDir;
   private $uploadPath;
 
-  function __construct($idart, $lang, $client, $galleryname, $folder, $thumb, $sort, $langIndependent, $commentFile = null) {
+  function __construct($idart, $lang, $client, $galleryname, $folder, $thumb, $sort, $langIndependent, $commentFile = null, $hasThumbs, $hasComments) {
     $this->idart = $idart;
     $this->lang = $lang;
     $this->client = $client;
@@ -38,6 +40,8 @@ class CntndGalleryOutput extends CntndUtil {
     $this->sort = $sort;
     $this->langIndependent=$langIndependent;
     $this->commentFile=$commentFile;
+    $this->hasThumbs=$hasThumbs;
+    $this->hasComments=$hasComments;
 
     $this->db = new \cDb;
 
@@ -130,7 +134,10 @@ class CntndGalleryOutput extends CntndUtil {
 
   public function load(){
     // comments
-    $comments = $this->createComments($this->commentFile);
+    $comments = array();
+    if ($this->hasComments) {
+      $comments = $this->createComments($this->commentFile);
+    }
 
     // images
     $cfg = \cRegistry::getConfig();
@@ -147,7 +154,10 @@ class CntndGalleryOutput extends CntndUtil {
       // Bilder
       if (in_array($this->db->f('filetype'),$this->imagetypes)){
         $image = $this->uploadDir.$this->db->f('dirname').$this->db->f('filename');
-        $thumb_image = $this->uploadDir.$this->db->f('dirname').$this->thumb.$this->db->f('filename');
+        $thumb_image = $this->uploadDir.$this->db->f('dirname').$this->db->f('filename');
+        if ($this->hasThumbs) {
+          $thumb_image = $this->uploadDir . $this->db->f('dirname') . $this->thumb . $this->db->f('filename');
+        }
         $this->images[$this->db->f('idupl')] = array (
             'image' => $image,
             'thumb' => $thumb_image,
